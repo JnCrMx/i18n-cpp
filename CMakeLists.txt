@@ -29,7 +29,9 @@ target_link_libraries(i18n-lib INTERFACE Intl::Intl)
 target_include_directories(i18n-lib INTERFACE
   "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>"
   "$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>")
-target_compile_options(i18n-lib INTERFACE "$<IF:$<CXX_COMPILER_ID:Clang>,-fplugin=$<TARGET_FILE:$<INSTALL_INTERFACE:i18n::>plugin>,>")
+if(BUILD_PLUGIN)
+  target_compile_options(i18n-lib INTERFACE "$<IF:$<CXX_COMPILER_ID:Clang>,-fplugin=$<TARGET_FILE:$<INSTALL_INTERFACE:i18n::>plugin>,>")
+endif()
 target_compile_features(i18n-lib INTERFACE cxx_std_20)
 target_compile_definitions(i18n-lib INTERFACE "$<IF:$<PLATFORM_ID:Darwin>,_INTL_REDIRECT_MACROS,>")
 
