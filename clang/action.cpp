@@ -126,7 +126,7 @@ class CommentHandler : public clang::CommentHandler {
 
     if (previous.isInvalid() && filter) {
       auto text = raw_comment.getFormattedText(sm, preprocessor.getDiagnostics());
-      if (!StringRef(text).ltrim().startswith(*filter)) return false;
+      if (!StringRef(text).ltrim().starts_with(*filter)) return false;
     }
 
     clang::Token tok;
@@ -425,7 +425,7 @@ class i18nVisitor : public clang::RecursiveASTVisitor<i18nVisitor> {
       str_index->setValue(*context, index);
       auto byte_value = subscript_expr->getIntegerConstantExpr(*context);
       if (!byte_value) { return nullopt; }
-      if (len == -1 && byte_value->isNullValue()) break;
+      if (len == -1 && byte_value->isZero()) break;
       str.push_back(byte_value->getExtValue());
     }
     return std::make_optional(str);
@@ -545,7 +545,7 @@ class i18nConsumer : public SemaConsumer {
       stream = std::ofstream(output->c_str());
     else {
       StringRef out_file = ci->getFrontendOpts().OutputFile;
-      if (out_file.empty()) out_file = main_file->getName();
+      if (out_file.empty()) out_file = main_file->tryGetRealPathName();
       if (out_file == "-") {
         std::cerr << "Unable to derive i18n output file name\n";
         return;
