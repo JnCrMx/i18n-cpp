@@ -1,6 +1,6 @@
 if(CMAKE_CXX_COMPILER_ID STREQUAL Clang)
   function(target_use_i18n TARGET)
-    cmake_parse_arguments(PARSE_ARGV 1 I18N "NODOMAIN;NODATE" "DOMAIN;COMMENT;BASEPATH;POT_FILE;POT_TARGET" "") 
+    cmake_parse_arguments(PARSE_ARGV 1 I18N "NODOMAIN;NODATE" "DOMAIN;COMMENT;BASEPATH;POT_FILE;POT_TARGET" "")
 
     if(DEFINED I18N_UNPARSED_ARGUMENTS)
       message(WARNING "Ignoring unexpected arguments ${I18N_UNPARSED_ARGUMENTS}")
@@ -40,6 +40,7 @@ if(CMAKE_CXX_COMPILER_ID STREQUAL Clang)
 
     get_target_property(srcs ${TARGET} SOURCES)
     foreach(src ${srcs})
+      cmake_path(RELATIVE_PATH src)
       set_source_files_properties(${src} PROPERTIES OBJECT_OUTPUTS "$<FILTER:$<TARGET_OBJECTS:${TARGET}>,INCLUDE,${src}>.poc")
     endforeach()
     add_custom_command(OUTPUT "${I18N_POT_FILE}"
@@ -68,7 +69,7 @@ else()
   mark_as_advanced(I18N_CLANG_RESOURCE_DIR)
 
   function(target_use_i18n TARGET)
-    cmake_parse_arguments(PARSE_ARGV 1 I18N "NODOMAIN;NODATE" "DOMAIN;COMMENT;BASEPATH;POT_FILE;POT_TARGET" "") 
+    cmake_parse_arguments(PARSE_ARGV 1 I18N "NODOMAIN;NODATE" "DOMAIN;COMMENT;BASEPATH;POT_FILE;POT_TARGET" "")
 
     set_target_properties("${TARGET}" PROPERTIES EXPORT_COMPILE_COMMANDS ON)
 
