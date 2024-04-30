@@ -10,7 +10,12 @@ target_sources(tests PRIVATE simple.cpp readme.cpp)
 target_link_libraries(tests PRIVATE fmt::fmt Catch2::Catch2WithMain)
 target_compile_definitions(tests PRIVATE "TEST_SOURCE_DIR=\"${CMAKE_CURRENT_SOURCE_DIR}\"")
 
+if(BUILD_PLUGIN)
 target_use_i18n(tests NODOMAIN COMMENT L10N:)
+endif()
 
 catch_discover_tests(tests)
-add_test(NAME compare_tests_pot COMMAND diff ${CMAKE_CURRENT_SOURCE_DIR}/tests.reference.pot tests.pot)
+
+if(BUILD_PLUGIN)
+    add_test(NAME compare_tests_pot COMMAND diff ${CMAKE_CURRENT_SOURCE_DIR}/tests.reference.pot tests.pot)
+endif()

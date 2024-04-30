@@ -7,11 +7,20 @@ project(i18n++
 
 set(CMAKE_CXX_EXTENSIONS off)
 
+option(BUILD_TESTING "Build tests" ON)
+option(BUILD_PLUGIN "Build Clang plugin" ON)
+option(BUILD_MERGE "Build i18n-merge-pot tool" ON)
+
 include(CTest)
 
 add_subdirectory(external)
-add_subdirectory(merge)
-add_subdirectory(clang)
+if(BUILD_MERGE)
+  add_subdirectory(merge)
+endif()
+
+if(BUILD_PLUGIN)
+  add_subdirectory(clang)
+endif()
 
 find_package(Intl REQUIRED)
 
@@ -30,9 +39,13 @@ add_dependencies(i18n-lib i18n_internal)
 
 
 add_library(i18n::i18n-lib ALIAS i18n-lib)
-add_executable(i18n::i18n-merge-pot ALIAS i18n-merge-pot)
-add_executable(i18n::i18n-extract ALIAS i18n-extract)
-include ( "${CMAKE_CURRENT_LIST_DIR}/i18n++Use.cmake" )
+if(BUILD_MERGE)
+  add_executable(i18n::i18n-merge-pot ALIAS i18n-merge-pot)
+endif()
+if(BUILD_PLUGIN)
+  add_executable(i18n::i18n-extract ALIAS i18n-extract)
+  include ( "${CMAKE_CURRENT_LIST_DIR}/i18n++Use.cmake" )
+endif()
 
 if(BUILD_TESTING)
   add_subdirectory(tests)

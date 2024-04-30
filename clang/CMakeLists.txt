@@ -4,7 +4,7 @@ add_executable(i18n-extract)
 add_library(plugin MODULE)
 add_library(clang_common OBJECT)
 
-find_package(Clang REQUIRED CONFIG)
+find_package(Clang ${CMAKE_CXX_COMPILER_VERSION} REQUIRED CONFIG)
 
 target_sources(clang_common PRIVATE attr.cpp action.cpp ../common/write_po.cpp)
 target_sources(i18n-extract PRIVATE tool.cpp)
