@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 3.20)
 
-add_subdirectory(boost)
+if(BUILD_MERGE OR BUILD_PLUGIN)
+    add_subdirectory(boost)
+endif()
 
 if(BUILD_TESTING)
     add_subdirectory(Catch2)
