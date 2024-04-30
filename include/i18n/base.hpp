@@ -6,12 +6,12 @@
 #include <concepts>
 #include <cstdint>
 
-#ifdef __has_cpp_attribute
-//#if __has_cpp_attribute(mfk::i18n)
+#ifdef __has_attribute
+#if __has_attribute(mfk_i18n)
 #define I18N_ATTR(x) [[mfk::i18n ## x]]
-//#else
-//#define I18N_ATTR(x)
-//#endif
+#else
+#define I18N_ATTR(x)
+#endif
 #else
 #define I18N_ATTR(x)
 #endif

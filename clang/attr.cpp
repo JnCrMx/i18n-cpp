@@ -16,21 +16,25 @@ using clang::isa, clang::dyn_cast;
 
 constexpr struct {
   const char *spelling;
+  const char *gnuSpelling;
   const char *annotation;
-} Mapping[]{{"mfk::i18n", "mfk::i18n"},
-            {"mfk::i18n_domain_begin", "mfk::i18n::domain::begin"},
-            {"mfk::i18n_domain_end", "mfk::i18n::domain::end"},
-            {"mfk::i18n_context_begin", "mfk::i18n::context::begin"},
-            {"mfk::i18n_context_end", "mfk::i18n::context::end"},
-            {"mfk::i18n_singular_begin", "mfk::i18n::singular::begin"},
-            {"mfk::i18n_singular_end", "mfk::i18n::singular::end"},
-            {"mfk::i18n_plural_begin", "mfk::i18n::plural::begin"},
-            {"mfk::i18n_plural_end", "mfk::i18n::plural::end"}};
+} Mapping[]{{"mfk::i18n", "mfk_i18n", "mfk::i18n"},
+            {"mfk::i18n_domain_begin", "mfk_i18n_domain_begin", "mfk::i18n::domain::begin"},
+            {"mfk::i18n_domain_end", "mfk_i18n_domain_end", "mfk::i18n::domain::end"},
+            {"mfk::i18n_context_begin", "mfk_i18n_context_begin", "mfk::i18n::context::begin"},
+            {"mfk::i18n_context_end", "mfk_i18n_context_end", "mfk::i18n::context::end"},
+            {"mfk::i18n_singular_begin", "mfk_i18n_singular_begin", "mfk::i18n::singular::begin"},
+            {"mfk::i18n_singular_end", "mfk_i18n_singular_end", "mfk::i18n::singular::end"},
+            {"mfk::i18n_plural_begin", "mfk_i18n_plural_begin", "mfk::i18n::plural::begin"},
+            {"mfk::i18n_plural_end", "mfk_i18n_plural_end", "mfk::i18n::plural::end"}};
 
 template <int Index>
 struct AttrInfo : public clang::ParsedAttrInfo {
-  static constexpr Spelling OurSpelling = {clang::ParsedAttr::AS_CXX11, Mapping[Index].spelling};
-  AttrInfo() { Spellings = OurSpelling; }
+  static constexpr Spelling OurSpelling[2] = {
+    {clang::ParsedAttr::AS_CXX11, Mapping[Index].spelling},
+    {clang::ParsedAttr::AS_GNU, Mapping[Index].gnuSpelling},
+  };
+  AttrInfo() {Spellings = OurSpelling; }
 
   bool diagAppertainsToDecl(clang::Sema &sema, const clang::ParsedAttr &attr,
                             const clang::Decl *declaration) const override {
