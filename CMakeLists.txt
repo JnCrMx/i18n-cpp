@@ -36,7 +36,9 @@ target_compile_features(i18n-lib INTERFACE cxx_std_20)
 target_compile_definitions(i18n-lib INTERFACE "$<IF:$<PLATFORM_ID:Darwin>,_INTL_REDIRECT_MACROS,>")
 
 add_custom_target(i18n_internal)
-add_dependencies(i18n_internal plugin)
+if(BUILD_PLUGIN)
+  add_dependencies(i18n_internal plugin)
+endif()
 add_dependencies(i18n-lib i18n_internal)
 
 
