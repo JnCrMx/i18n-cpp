@@ -51,6 +51,8 @@ if(BUILD_TESTING)
   add_subdirectory(tests)
 endif()
 
+include(GNUInstallDirs)
+
 install(TARGETS i18n-lib EXPORT i18n++Targets)
 install(DIRECTORY include/ DESTINATION ${CMAKE_INSTALL_INCLUDEDIR} FILES_MATCHING PATTERN "*.hpp")
 install(EXPORT i18n++Targets NAMESPACE i18n:: FILE i18n++Targets.cmake DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/i18n++)
