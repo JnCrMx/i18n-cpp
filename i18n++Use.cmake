@@ -40,7 +40,10 @@ if(CMAKE_CXX_COMPILER_ID STREQUAL Clang)
 
     get_target_property(srcs ${TARGET} SOURCES)
     foreach(src ${srcs})
-      cmake_path(RELATIVE_PATH src)
+      cmake_path(IS_ABSOLUTE src is_absolute_path)
+      if(is_absolute_path)
+        cmake_path(RELATIVE_PATH src)
+      endif()
       set_source_files_properties(${src} PROPERTIES OBJECT_OUTPUTS "$<FILTER:$<TARGET_OBJECTS:${TARGET}>,INCLUDE,${src}>.poc")
     endforeach()
     add_custom_command(OUTPUT "${I18N_POT_FILE}"
