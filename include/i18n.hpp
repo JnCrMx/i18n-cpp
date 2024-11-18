@@ -455,9 +455,11 @@ constexpr auto build_I18NString_generic() {
   constexpr TripleString strings = [&] {
     TripleString result{};
     result.context = detail::extract_context<char_type, lengths.context>(Str.begin());
-    std::tie(result.singular, result.plural) =
+    auto&& [singular, plural] =
         detail::extract_singular_plural<lengths.singular, lengths.plural>(lengths.start_main,
                                                                           Str.end());
+    result.singular = singular;
+    result.plural = plural;
     return result;
   }();
 
