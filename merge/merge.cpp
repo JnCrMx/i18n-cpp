@@ -73,7 +73,7 @@ void combine_elements(std::vector<Message> &msgs) {
                                     std::make_move_iterator(read_iter->extractedComments.begin()),
                                     std::make_move_iterator(read_iter->extractedComments.end()));
     }
-    if (write_iter + 1 != read_iter) *write_iter = std::move(base);
+    if (write_iter + 1 != read_iter && &*write_iter != &base) *write_iter = std::move(base);
     ++write_iter;
   }
   msgs.erase(write_iter, msgs.end());
