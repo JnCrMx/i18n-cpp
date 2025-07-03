@@ -39,12 +39,15 @@ if(CMAKE_CXX_COMPILER_ID STREQUAL Clang)
     endif()
 
     get_target_property(srcs ${TARGET} SOURCES)
+    get_target_property(modules ${TARGET} CXX_MODULE_SET)
+    set(srcs ${srcs} ${modules})
+    list(REMOVE_DUPLICATES srcs)
     foreach(src ${srcs})
       cmake_path(IS_ABSOLUTE src is_absolute_path)
       if(is_absolute_path)
         cmake_path(RELATIVE_PATH src)
       endif()
-      set_source_files_properties(${src} PROPERTIES OBJECT_OUTPUTS "$<FILTER:$<TARGET_OBJECTS:${TARGET}>,INCLUDE,${src}>.poc")
+      set_source_files_properties(${src} PROPERTIES OBJECT_OUTPUTS "$<LIST:TRANSFORM,$<FILTER:$<TARGET_OBJECTS:${TARGET}>,INCLUDE,${src}.o>,APPEND,.poc>")
     endforeach()
     add_custom_command(OUTPUT "${I18N_POT_FILE}"
       COMMAND ${I18N_NODATE}
