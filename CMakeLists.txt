@@ -10,6 +10,7 @@ set(CMAKE_CXX_EXTENSIONS off)
 option(BUILD_TESTING "Build tests" ON)
 option(BUILD_PLUGIN "Build Clang plugin" ON)
 option(BUILD_MERGE "Build i18n-merge-pot tool" ON)
+option(NO_LIBINTL "Disable libintl dependency; you will have to provide the gettext functions yourself somehow!" OFF)
 
 include(CTest)
 
@@ -22,10 +23,14 @@ if(BUILD_PLUGIN)
   add_subdirectory(clang)
 endif()
 
-find_package(Intl REQUIRED)
+if(NOT NO_LIBINTL)
+  find_package(Intl REQUIRED)
+endif()
 
 add_library(i18n-lib INTERFACE)
-target_link_libraries(i18n-lib INTERFACE Intl::Intl)
+if(NOT NO_LIBINTL)
+  target_link_libraries(i18n-lib INTERFACE Intl::Intl)
+endif()
 target_include_directories(i18n-lib INTERFACE
   "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>"
   "$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>")
