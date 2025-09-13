@@ -53,7 +53,7 @@ class I18NStringImpl {
   template <typename... Args>
   decltype(auto) operator()(Args &&...args) const {
     return fmtstd::vformat(std::string_view(*this),
-                           fmtstd::make_format_args(std::forward<Args>(args)...));
+                           fmtstd::make_format_args(args...));
   }
 
  protected:
@@ -77,7 +77,7 @@ class I18NPluralStringImpl {
   template <convertible_to<unsigned long> First, typename... Args>
   decltype(auto) operator()(First &&first, Args &&...args) const {
     return fmtstd::vformat((*this)[first], fmtstd::make_format_args(std::forward<First>(first),
-                                                                    std::forward<Args>(args)...));
+                                                                    args...));
   }
 
  protected:
