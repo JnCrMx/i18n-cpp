@@ -12,12 +12,12 @@
 #include <clang/AST/RecursiveASTVisitor.h>
 #include <clang/AST/Type.h>
 #include <clang/Basic/Diagnostic.h>
+#include <clang/Basic/DiagnosticParse.h>
 #include <clang/Basic/LangOptions.h>
 #include <clang/Basic/SourceLocation.h>
 #include <clang/Basic/SourceManager.h>
 #include <clang/Frontend/CompilerInstance.h>
 #include <clang/Lex/Preprocessor.h>
-#include <clang/Parse/ParseDiagnostic.h>
 #include <clang/Sema/Sema.h>
 #include <clang/Sema/SemaConsumer.h>
 #include <filesystem>
@@ -520,6 +520,8 @@ class i18nConsumer : public SemaConsumer {
 
   void HandleTranslationUnit(clang::ASTContext &context) override {
     i18nVisitor visitor(*sema, context);
+
+    context.getTranslationUnitDecl()->dump(llvm::nulls(), true); // this fixes some weird bug... :(
     visitor.TraverseDecl(context.getTranslationUnitDecl());
 
     auto &sm       = ci->getSourceManager();
